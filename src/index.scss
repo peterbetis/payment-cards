@@ -1,0 +1,15 @@
+@font-face {
+	font-family: "lineto-circular-pro-book";
+	font-style: bolder;
+	font-weight: 900;
+	src: url("../src/assets/fonts/lineto-circular-pro-book.woff2") format("woff2"),
+	     url("../src/assets/fonts/lineto-circular-pro-book.woff") format("woff"),
+	     url("../src/assets/fonts/lineto-circular-pro-book.ttf") format("truetype");
+}
+
+body {
+  margin: 0;
+  font-family: lineto-circular-pro-book,Helvetica Neue,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

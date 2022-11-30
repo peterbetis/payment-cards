@@ -1,0 +1,136 @@
+@import '../../sass/_settings.scss';
+
+html,
+body {
+  font-family: lineto-circular-pro-book,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+.card {
+  display: block;
+  width: 310px;
+  height: 185px;
+  margin: $spacing-16 auto;
+  background-repeat: no-repeat;
+  background-position: right top;
+  border-radius: $border-radius-small;
+}
+
+.card-content {
+  position: relative;
+  padding: $spacing-24;
+  font-weight: 700;  
+  color: $white;
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: block;
+    width: 41px;
+    height: $spacing-24;
+  }  
+
+  .card-top-group {
+    display: flex;
+    justify-content: space-between;
+    text-align: right;
+
+    .group {
+      padding-left: $spacing-24;
+
+      .title {
+        margin: 0;
+        font-size: $font-size-10;
+        font-weight: bold;
+      }
+
+      .number {
+        margin: 0;
+        font-size: $font-size-16;
+      }
+    }
+  }
+
+  .card-bottom-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: $spacing-32;
+
+    .group {
+      position: relative;
+      text-align: left;
+    }
+
+    p.card-number {
+      margin: 0;
+    }
+
+    span {
+    margin: 0 $spacing-8;
+
+      &:nth-child(1) {
+        margin: 0;
+      }
+    }
+
+    .edit-icon {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 18px;
+      height: 18px;
+      margin-bottom: 0;
+      text-align: right;
+      background-image: url(../../assets//images/edit-icon.svg);
+    }
+  }
+}
+
+.card-mastercard {
+  background-color: $medium-purple;
+  background-image: url(../../assets//images/card-background-shape.svg);
+  
+  .logo {
+    width: 41px;
+    height: 24px;
+    background-image: url(../../assets//images/mastercard-logo.svg);
+  }  
+  .card-top-group {
+    .group {
+      
+      .title {
+        color: #798291;
+      }
+    }
+  }
+  
+  .card-number * {
+    color: #E5E5E5;
+  }
+}
+
+.card-visa {
+  background-color: $card-green-left;
+  background-image: url("data:image/svg+xml,%3Csvg width='257' height='184' viewBox='0 0 257 184' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M208.202 -14.271L131 101.5L7.93761 160.029C-8.05573 173.918 1.67932 201 23.2356 201H423.764C445.321 201 455.056 173.918 439.062 160.029L238.798 -14.271C230.454 -21.9097 217.242 -21.9097 208.202 -14.271Z' fill='%233FC4C3'/%3E%3C/svg%3E%0A");
+  
+  .logo {
+    width: 41px;
+    height: 12px;
+    background-image: url(../../assets//images/visa-logo.svg);
+  }
+  .card-top-group {
+    .group {
+
+      .title,
+      .card-number {
+        color: $dark-grey;
+      }
+    }
+  }
+
+  .card-number * {
+    color: #1A212C;
+  }  
+}

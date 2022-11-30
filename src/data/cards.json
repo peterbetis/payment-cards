@@ -1,0 +1,18 @@
+[
+    {
+        "id": "001",
+        "type": "mastercard",
+        "cvc_number": "009",
+        "expiration_date": "08/21",
+        "name": "John Cabruci",
+        "number": [ "5532","1234","5545","8014"]
+    },
+    {
+        "id": "002",
+        "type": "visa",
+        "cvc_number": "129",
+        "expiration_date": "12/24",
+        "name": "John Cabruci",
+        "number": [ "0943","2361","9876","0987"]
+    }        
+]
