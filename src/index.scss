@@ -1,10 +1,13 @@
 @font-face {
 	font-family: "lineto-circular-pro-book";
-	font-style: bolder;
-	font-weight: 900;
 	src: url("../src/assets/fonts/lineto-circular-pro-book.woff2") format("woff2"),
 	     url("../src/assets/fonts/lineto-circular-pro-book.woff") format("woff"),
 	     url("../src/assets/fonts/lineto-circular-pro-book.ttf") format("truetype");
+}
+
+html,
+body {
+	height: 100%;
 }
 
 body {

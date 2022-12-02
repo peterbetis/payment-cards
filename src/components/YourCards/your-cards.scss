@@ -7,25 +7,12 @@
     margin: $spacing-24 auto;
     text-align: center;
 
-    .cards {
-      margin: 55px auto 40px;
+    h1 {
+      color: $light-purple;
     }
 
-    .heading {
-      display: block;
-      text-align: left;
-
-      h1 {
-        margin: $spacing-8 0;
-        font-size: $font-size-30;
-        line-height: 100%;        
-        color: $light-purple;
-      }
-
-      p {
-        color: $medium-grey;
-        margin: $spacing-8 0;
-      }
+    .cards {
+      margin: 55px auto 40px;
     }
 
     .btn-add-new-card {
@@ -37,8 +24,19 @@
       font-size: $font-size-16;  
       font-weight: 900;
       color: #fff;
+      cursor: pointer;
       background-color: $light-purple;
       border: none;
       border-radius: 100px;
     }
+}
+
+.heading {
+  display: block;
+  text-align: left;
+
+  p {
+    margin: $spacing-8 0;
+    color: $medium-grey;
+  }
 }

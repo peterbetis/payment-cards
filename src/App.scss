@@ -1,7 +1,16 @@
 @import './sass/_settings.scss';
 
 .App {
+  position: relative;
   padding: $spacing-16;
   margin: 0 auto;
   text-align: center;
+}
+
+h1 {
+	margin: $spacing-8 0;
+	font-size: $font-size-24;
+  font-weight: 900;  
+	line-height: 100%;
+	color: $dark;
 }

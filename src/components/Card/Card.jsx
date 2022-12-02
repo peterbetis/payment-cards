@@ -1,7 +1,8 @@
 import './card.scss'
-const Card = ({ card }) => {
+
+const Card = ({ card, editCard }) => {
  return (
-    <div className={`card card-${card.type}`}>
+    <div className={`card card-${card.type}`} onClick={() => editCard(card)}>
       <div className="card-content">
         
         <div className="row">
@@ -22,7 +23,7 @@ const Card = ({ card }) => {
             <div className="group">
               <p className="title">{card.name}</p>
               <p className="card-number">
-                {card.number.map(chunk => <span key={chunk}>{chunk}</span>)}
+                {card.card_number.map(chunk => <span key={chunk}>{chunk}</span>)}
               </p>
             </div>
             <div className="group">

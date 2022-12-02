@@ -1,13 +1,48 @@
-import Cards from './components/Cards'
+import { useState } from 'react'
+import Overlay from './components/Overlay'
+import AddCard from './components/AddCard'
+import EditCard from './components/EditCard'
+import YourCards from './components/YourCards'
 import './App.scss'
 
 function App() {
 
+  const [showOverlay, setShowOverlay] = useState(false)
+  const [showAddCard, setShowAddCard] = useState(false)
+  const [showEditCard, setShowEditCard] = useState(false)
+  const [selectedCard, setSelectedCard] = useState({})
+
+  const addANewCard = () => {
+    setShowOverlay(true)
+    setShowAddCard(true)
+  }
+
+  const editCard = (card) => {
+    setShowOverlay(true)
+    setShowEditCard(true)
+    setSelectedCard(card)
+  }  
+
   return (
       <div className="App">
-          <Cards /> 
+          {showOverlay && (<Overlay />)}
+          {showAddCard && (
+            <AddCard 
+              showAddCard={showAddCard} 
+              setShowAddCard={setShowAddCard}
+              setShowOverlay={setShowOverlay}
+            />)}
+          {showEditCard && (
+            <EditCard 
+              showEditCard={showEditCard} 
+              setShowEditCard={setShowEditCard}
+              setShowOverlay={setShowOverlay}
+              card={selectedCard}
+            />)}
+          
+          <YourCards addANewCard={addANewCard} editCard={editCard} />
       </div>
-  );
+  )
 }
 
-export default App;
+export default App
