@@ -23,7 +23,7 @@ const Card = ({ card, editCard }) => {
             <div className="group">
               <p className="title">{card.name}</p>
               <p className="card-number">
-                {card.card_number.map(chunk => <span key={chunk}>{chunk}</span>)}
+                {card.card_number.map((chunk,index) => <span key={index}>{chunk}</span>)}
               </p>
             </div>
             <div className="group">

@@ -7,10 +7,10 @@ const CardForm = ({closeAddCard, closeEditCard, editingCard}) => {
     const cardTypes = ['visa', 'mastercard']
     const { dispatch } = useContext(CardContext)
     
-    const [nameValidated, setNameValidated] = useState(false)
-    const [cardNumberValidated, setCardNumberValidated] = useState(false)
-    const [expirationDateValidated, setExpirationDateValidated] = useState(false)
-    const [cvcNumberValidated, setCvcNumberValidated] = useState(false)
+    const [nameValidated, setNameValidated] = useState(editingCard ? true : false)
+    const [cardNumberValidated, setCardNumberValidated] = useState(editingCard ? true : false)
+    const [expirationDateValidated, setExpirationDateValidated] = useState(editingCard ? true : false)
+    const [cvcNumberValidated, setCvcNumberValidated] = useState(editingCard ? true : false)
     const [submitEnabled, setSubmitEnabled] = useState(false)
 
     const [nameState, setNameState] = useState(editingCard ? editingCard.name : '')
@@ -99,7 +99,7 @@ const CardForm = ({closeAddCard, closeEditCard, editingCard}) => {
             if (editingCard) {
                 dispatch({ type: 'EDIT_CARD', card: {
                     id: editingCard.id,
-                    type: cardTypes[Math.floor(Math.random()*cardTypes.length)],
+                    type: editingCard.type,
                     cvc_number: cvcNumberState,
                     expiration_date: expirationDateState,
                     name: nameState,
