@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { CardContext } from '../../data/CardContext'
-import './form.scss'
+import '../../styles/form.scss'
 
 const CardForm = ({closeAddCard, closeEditCard, editingCard}) => {
 
@@ -89,6 +89,7 @@ const CardForm = ({closeAddCard, closeEditCard, editingCard}) => {
                 validateCvc(name, value)
                 break
              }
+             default: break
          }
     }
 

@@ -1,5 +1,5 @@
 import CardForm from '../CardForm'
-import './addcard.scss'
+import '../../styles/addcard.scss'
 
 const AddCard = ({ showAddCard, setShowAddCard, setShowOverlay }) => {
 

@@ -1,4 +1,4 @@
-import './overlay.scss'
+import '../../styles/overlay.scss'
 
 const Overlay = () => {
     return (

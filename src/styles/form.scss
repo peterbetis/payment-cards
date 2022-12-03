@@ -1,4 +1,4 @@
-@import '../../sass/_settings.scss';
+@import './_settings.scss';
 
 .details-form {
     max-width: 310px;
@@ -71,7 +71,7 @@
                 color: red;
                 cursor: pointer;
                 content: "";
-                background: url(../../assets/images/form-error.svg);
+                background: url(../assets/images/form-error.svg);
                 background-repeat: no-repeat;
             }
         }
@@ -104,7 +104,7 @@
                 color: $green;
                 cursor: pointer;
                 content: "";
-                background: url(../../assets/images/form-success.svg);
+                background: url(../assets/images/form-success.svg);
                 background-repeat: no-repeat;                
             }
         }        

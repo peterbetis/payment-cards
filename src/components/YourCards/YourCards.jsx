@@ -1,7 +1,7 @@
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { CardContext } from "../../data/CardContext"
 import Card from '../Card'
-import './your-cards.scss'
+import '../../styles/your-cards.scss'
 
 const Cards = ({ addANewCard, editCard }) => {
     

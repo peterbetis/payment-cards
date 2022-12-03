@@ -1,4 +1,4 @@
-import './card.scss'
+import '../../styles/card.scss'
 
 const Card = ({ card, editCard }) => {
  return (
