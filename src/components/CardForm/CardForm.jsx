@@ -2,22 +2,29 @@ import { useContext, useEffect, useState } from 'react'
 import { CardContext } from '../../data/CardContext'
 import '../../styles/form.scss'
 
-const CardForm = ({closeAddCard, closeEditCard, editingCard}) => {
+const CardForm = ({
+    closeAddCard, 
+    closeEditCard, 
+    editingCard,
+    editCardState,
+    setEditCardState
+    }) => {
 
-    const cardTypes = ['visa', 'mastercard']
     const { dispatch } = useContext(CardContext)
-    
-    const [nameValidated, setNameValidated] = useState(editingCard ? true : false)
-    const [cardNumberValidated, setCardNumberValidated] = useState(editingCard ? true : false)
-    const [expirationDateValidated, setExpirationDateValidated] = useState(editingCard ? true : false)
-    const [cvcNumberValidated, setCvcNumberValidated] = useState(editingCard ? true : false)
+
+    const [fieldsValidated, setFieldsValidated] = useState({
+        name: editingCard ? true : false,
+        card_number: editingCard ? true : false,
+        expiration_date: editingCard ? true : false,
+        cvc_number: editingCard ? true : false
+    })
     const [submitEnabled, setSubmitEnabled] = useState(false)
-
-    const [nameState, setNameState] = useState(editingCard ? editingCard.name : '')
-    const [expirationDateState, setExpirationDateState] = useState(editingCard ? editingCard.expiration_date : '')
-    const [cardNumberState, setCardNumberState] = useState(editingCard ? editingCard.card_number.join('') : '')
-    const [cvcNumberState, setCvcNumberState] = useState(editingCard ? editingCard.cvc_number : '')
-
+    const [newCardState, setNewCardState] = useState({
+        cvc_number: '',
+        expiration_date: '',
+        name: '',
+        card_number: ''
+    })
     const [hasError, setHasError] = useState({
         card_name: false,
         card_number: false,
@@ -30,18 +37,17 @@ const CardForm = ({closeAddCard, closeEditCard, editingCard}) => {
             ...prevState,
             [name]: /^[A-Za-z\s]*$/.test(nameValue) ? false : true
         }))
-        nameValue ? setNameValidated(/^[A-Za-z\s]*$/.test(nameValue)) : setNameValidated(false)
-        setNameState(nameValue)
+        nameValue ? setFieldsValidated({...fieldsValidated, name: /^[A-Za-z\s]*$/.test(nameValue)}) : setFieldsValidated({...fieldsValidated, name: false})
+        editCardState ? setEditCardState({...editCardState, name: nameValue}) : setNewCardState({...newCardState, name: nameValue})
     }
     
     const validateCardNumber = (name, card_number) =>  {
-        document.querySelector('input[name=card_number]').value.replace(/\D/g, "")
         setHasError(prevState => ({
             ...prevState,
             [name]: (card_number.length === 16 && /^[0-9]+$/.test(card_number)) ? false : true
         }))
-        setCardNumberValidated(card_number.length === 16 && /^[0-9]+$/.test(card_number))
-        setCardNumberState(card_number)
+        setFieldsValidated({...fieldsValidated, card_number: card_number.length === 16 && /^[0-9]+$/.test(card_number)})
+        editCardState ? setEditCardState({...editCardState, card_number: card_number}) : setNewCardState({...newCardState, card_number: card_number})
     }
 
     const validateExpirationDate = (name, expiration_date) =>  {
@@ -53,8 +59,8 @@ const CardForm = ({closeAddCard, closeEditCard, editingCard}) => {
             ...prevState,
             [name]: (expiration_date.match(regx)) ? false : true
         }))
-        setExpirationDateValidated(expiration_date.match(regx))
-        setExpirationDateState(expiration_date)
+        setFieldsValidated({...fieldsValidated, expiration_date: expiration_date.match(regx) !== null })
+        editCardState ? setEditCardState({...editCardState, expiration_date: expiration_date}) : setNewCardState({...newCardState, expiration_date: expiration_date})
     }
 
     const validateCvc = (name, cvc_number) =>  {
@@ -66,8 +72,8 @@ const CardForm = ({closeAddCard, closeEditCard, editingCard}) => {
             ...prevState,
             [name]: (cvcNumberField.value.length === 3 && /^[0-9]+$/.test(cvc_number)) ? false : true
         }))
-        setCvcNumberValidated(cvcNumberField.value.length === 3 && /^[0-9]+$/.test(cvc_number))
-        setCvcNumberState(cvc_number)
+        setFieldsValidated({...fieldsValidated, cvc_number: (cvcNumberField.value.length === 3 && /^[0-9]+$/.test(cvc_number))})
+        editCardState ? setEditCardState({...editCardState, cvc_number: cvc_number}) : setNewCardState({...newCardState, cvc_number: cvc_number})
     }    
 
     const onInputChange = (e) => {
@@ -100,19 +106,18 @@ const CardForm = ({closeAddCard, closeEditCard, editingCard}) => {
                 dispatch({ type: 'EDIT_CARD', card: {
                     id: editingCard.id,
                     type: editingCard.type,
-                    cvc_number: cvcNumberState,
-                    expiration_date: expirationDateState,
-                    name: nameState,
-                    card_number: cardNumberState
+                    cvc_number: editCardState.cvc_number,
+                    expiration_date: editCardState.expiration_date,
+                    name: editCardState.name,
+                    card_number: editCardState.card_number
                 }})
                 closeEditCard()
             } else {
                 dispatch({ type: 'ADD_CARD', card: {
-                    type: cardTypes[Math.floor(Math.random()*cardTypes.length)],
-                    cvc_number: cvcNumberState,
-                    expiration_date: expirationDateState,
-                    name: nameState,
-                    card_number: cardNumberState
+                    cvc_number: newCardState.cvc_number,
+                    expiration_date: newCardState.expiration_date,
+                    name: newCardState.name,
+                    card_number: newCardState.card_number
                 }})
                 closeAddCard()
             }
@@ -120,59 +125,57 @@ const CardForm = ({closeAddCard, closeEditCard, editingCard}) => {
     }
 
     useEffect(() => {
-        (nameValidated && cardNumberValidated && expirationDateValidated && cvcNumberValidated) ? setSubmitEnabled(true) : setSubmitEnabled(false)
-    }, [nameValidated, cardNumberValidated, expirationDateValidated, cvcNumberValidated])
+        Object.values(fieldsValidated).every(field => field === true) ? setSubmitEnabled(true) : setSubmitEnabled(false)
+    }, [fieldsValidated])
 
     return (
         <form className="details-form" onSubmit={((e) => handleSubmit(e))}>
 
             <div className="form-group">
-                <label className={"label" + (hasError.card_name ? " has-errors" : "") + (nameValidated ? " validated" : "")}>
-                    Name in card</label>
+                <label className={"label" + (hasError.card_name ? " has-errors" : "") + (fieldsValidated.name ? " validated" : "")}>Name in card</label>
                 <input 
                     type="text"
                     name="card_name"
                     onChange={(e)=> onInputChange(e)}
                     placeholder="John Doe"
                     maxLength="40"
-                    value={nameState}
+                    value={editCardState ? editCardState.name : newCardState.name}
                 />
                 <label className={"error-label" + (hasError.card_name ? " visible" : "")}>Please fil in your name</label>
             </div>
             <div className="form-group">
-                <label className={"label" + (hasError.card_number ? " has-errors" : "") + (cardNumberValidated ? " validated" : "")}>
-                    Card number</label>
+                <label className={"label" + (hasError.card_number ? " has-errors" : "") + (fieldsValidated.card_number ? " validated" : "")}>Card number</label>
                 <input 
                     type="text"
                     name="card_number" 
                     onChange={(e)=> onInputChange(e)}
                     placeholder="0000 0000 0000 0000"
                     maxLength="16"
-                    value={cardNumberState}
+                    value={editCardState ? editCardState.card_number  : newCardState.card_number}
                 />
                 <label className={"error-label" + (hasError.card_number ? " visible" : "")}>Please enter a valid credit card number</label>
             </div>
             <div className="form-group">
-                <label className={"label" + (hasError.expiration_date ? " has-errors" : "") + (expirationDateValidated ? " validated" : "")}>Expiry date</label>
+                <label className={"label" + (hasError.expiration_date ? " has-errors" : "") + (fieldsValidated.expiration_date ? " validated" : "")}>Expiry date</label>
                 <input 
                     type="text"
                     name="expiration_date"
                     onChange={(e)=> onInputChange(e)}
                     placeholder="00/00"
                     maxLength="5"
-                    value={expirationDateState}
+                    value={editCardState ? editCardState.expiration_date : newCardState.expiration_date}
                 />
                 <label className={"error-label" + (hasError.expiration_date ? " visible" : "")}>Please enter a valid expiry date</label>
             </div>
             <div className="form-group">
-                <label className={"label" + (hasError.cvc_number ? " has-errors" : "") + (cvcNumberValidated ? " validated" : "")}>CVC(Security code)</label>
+                <label className={"label" + (hasError.cvc_number ? " has-errors" : "") + (fieldsValidated.cvc_number ? " validated" : "")}>CVC(Security code)</label>
                 <input 
                     type="text"
                     name="cvc_number"
                     onChange={(e)=> onInputChange(e)}
                     placeholder="000"
                     maxLength="3"
-                    value={cvcNumberState}
+                    value={editCardState ? editCardState.cvc_number : newCardState.cvc_number}
                 />
                 <label className={"error-label" + (hasError.cvc_number ? " visible" : "")}>Please enter a valid Security code</label>
             </div>

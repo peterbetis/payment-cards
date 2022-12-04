@@ -1,7 +1,7 @@
 import CardForm from '../CardForm'
 import '../../styles/addcard.scss'
 
-const AddCard = ({ showAddCard, setShowAddCard, setShowOverlay }) => {
+const AddCard = ({ setShowAddCard, setShowOverlay }) => {
 
     const closeAddCard = () => {
         setShowAddCard(false)
@@ -9,7 +9,7 @@ const AddCard = ({ showAddCard, setShowAddCard, setShowOverlay }) => {
     }
 
     return (
-        <div className={"add-card-container " + (showAddCard ? 'open' : null)}>
+        <div className="add-card-container">
             <div className="close-add-card">
                 <button className="btn-close" onClick={() => closeAddCard()} />
             </div>

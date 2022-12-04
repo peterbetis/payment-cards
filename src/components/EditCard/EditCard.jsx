@@ -1,8 +1,16 @@
+import { useState } from 'react'
 import CardForm from '../CardForm'
 import Card from '../Card'
 import '../AddCard'
 
-const EditCard = ({ showEditCard, setShowEditCard, setShowOverlay, card }) => {
+const EditCard = ({ setShowEditCard, setShowOverlay, card }) => {
+
+    const [editCardState, setEditCardState] = useState({
+        cvc_number: card.cvc_number,
+        expiration_date: card.expiration_date,
+        name: card.name,
+        card_number: card.card_number     
+    })
 
     const closeEditCard = () => {
         setShowEditCard(false)
@@ -10,15 +18,24 @@ const EditCard = ({ showEditCard, setShowEditCard, setShowOverlay, card }) => {
     }
 
     return (
-        <div className={"add-card-container " + (showEditCard ? 'open' : null)}>
+        <div className="add-card-container" >
             <div className="close-add-card">
                 <button className="btn-close" onClick={() => closeEditCard()} />
             </div>
-            
+
             <h1>Edit your card</h1>
 
-            <Card card={card} key={card.id} />
-            <CardForm closeEditCard={closeEditCard} editingCard={card} />
+            <Card 
+                card={card} 
+                key={card.id}
+                editCardState={editCardState}
+            />
+            <CardForm 
+                closeEditCard={closeEditCard}
+                editingCard={card}
+                editCardState={editCardState}
+                setEditCardState={setEditCardState}
+            />
         </div>
     )
 }

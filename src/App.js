@@ -18,10 +18,10 @@ function App() {
   }
 
   const editCard = (card) => {
+    setSelectedCard(card)
     setShowOverlay(true)
     setShowEditCard(true)
-    setSelectedCard(card)
-  }  
+  }
 
   return (
       <div className="App">
@@ -33,8 +33,7 @@ function App() {
               setShowOverlay={setShowOverlay}
             />)}
           {showEditCard && (
-            <EditCard 
-              showEditCard={showEditCard} 
+            <EditCard
               setShowEditCard={setShowEditCard}
               setShowOverlay={setShowOverlay}
               card={selectedCard}

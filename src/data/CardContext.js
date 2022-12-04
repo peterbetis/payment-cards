@@ -1,12 +1,9 @@
 import { createContext, useReducer } from "react"
+import { getUniqueId } from '../utils/getUniqueId'
 import cardList from './cards.json'
 
-const getUniqueId = () => String(
-    Date.now().toString(32) +
-      Math.random().toString(16)
-  ).replace(/\./g, '')
 
-const saveCardNumber = (number) => number.match(/.{1,4}/g)
+const cardTypes = ['visa', 'mastercard']  
 
 const cardReducer = (state, action) => {
   switch (action.type) {
@@ -16,11 +13,11 @@ const cardReducer = (state, action) => {
           ...state.cards,
           {
             id: getUniqueId(),
-            type: action.card.type,
+            type: cardTypes[Math.floor(Math.random()*cardTypes.length)],
             cvc_number: action.card.cvc_number,
             expiration_date: action.card.expiration_date,
             name: action.card.name,
-            card_number: saveCardNumber(action.card.card_number)
+            card_number: action.card.card_number
           }
         ]
       }
@@ -29,11 +26,11 @@ const cardReducer = (state, action) => {
         if (currentCard.id === action.card.id) {
            return { ...currentCard,
             id: action.card.id,
-            type: action.card.type,            
+            type: action.card.type,
             cvc_number: action.card.cvc_number,
             expiration_date: action.card.expiration_date,
             name: action.card.name,
-            card_number: saveCardNumber(action.card.card_number)
+            card_number: action.card.card_number
           }
         }
           return currentCard
