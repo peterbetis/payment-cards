@@ -3,7 +3,7 @@
 .cards-container {
     position: relative;
     width: 310px;
-    padding-bottom: 100px;    
+    padding-bottom: $spacing-56;    
     margin: $spacing-24 auto;
     text-align: center;
 
@@ -12,7 +12,7 @@
     }
 
     .cards {
-      margin: 55px auto 40px;
+      margin: $spacing-40 auto;
     }
 
     .btn-add-new-card {

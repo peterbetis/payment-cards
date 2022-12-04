@@ -1,4 +1,5 @@
 import CardForm from '../CardForm'
+import Card from '../Card'
 import '../AddCard'
 
 const EditCard = ({ showEditCard, setShowEditCard, setShowOverlay, card }) => {
@@ -16,6 +17,7 @@ const EditCard = ({ showEditCard, setShowEditCard, setShowOverlay, card }) => {
             
             <h1>Edit your card</h1>
 
+            <Card card={card} key={card.id} />
             <CardForm closeEditCard={closeEditCard} editingCard={card} />
         </div>
     )

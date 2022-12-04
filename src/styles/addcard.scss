@@ -15,13 +15,9 @@
     h1 {
         width: 310px;
         margin-right: auto;      
+        margin-bottom: $spacing-40;
         margin-left: auto;
         text-align: left;
-    }    
-
-    p {
-        margin: $spacing-8 0;
-        color: $medium-grey;
     }
 
     .close-add-card {
@@ -37,6 +33,7 @@
             &:after {
                 font-size: 32px;
                 font-weight: 900;                
+                color: $dark;
                 cursor: pointer;
                 content: "\00d7";
             }
