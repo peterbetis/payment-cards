@@ -13,86 +13,53 @@ const CardForm = ({
     const { dispatch } = useContext(CardContext)
 
     const [fieldsValidated, setFieldsValidated] = useState({
-        name: editingCard ? true : false,
-        card_number: editingCard ? true : false,
-        expiration_date: editingCard ? true : false,
-        cvc_number: editingCard ? true : false
+        card_name: editingCard ? true : null,
+        card_number: editingCard ? true : null,
+        expiration_date: editingCard ? true : null,
+        cvc_number: editingCard ? true : null
     })
     const [submitEnabled, setSubmitEnabled] = useState(false)
     const [newCardState, setNewCardState] = useState({
         cvc_number: '',
         expiration_date: '',
-        name: '',
+        card_name: '',
         card_number: ''
     })
-    const [hasError, setHasError] = useState({
-        card_name: false,
-        card_number: false,
-        expiration_date: false,
-        cvc_number: false
-    })
 
-    const validateName = (name, nameValue) => {
-        setHasError(prevState => ({
-            ...prevState,
-            [name]: /^[A-Za-z\s]*$/.test(nameValue) ? false : true
-        }))
-        nameValue ? setFieldsValidated({...fieldsValidated, name: /^[A-Za-z\s]*$/.test(nameValue)}) : setFieldsValidated({...fieldsValidated, name: false})
-        editCardState ? setEditCardState({...editCardState, name: nameValue}) : setNewCardState({...newCardState, name: nameValue})
+    const validateField = (name, condition, value) => {
+        setFieldsValidated({...fieldsValidated, [name]: condition})
+        editCardState ? setEditCardState({...editCardState, [name]: value}) : setNewCardState({...newCardState, [name]: value})
     }
     
-    const validateCardNumber = (name, card_number) =>  {
-        setHasError(prevState => ({
-            ...prevState,
-            [name]: (card_number.length === 16 && /^[0-9]+$/.test(card_number)) ? false : true
-        }))
-        setFieldsValidated({...fieldsValidated, card_number: card_number.length === 16 && /^[0-9]+$/.test(card_number)})
-        editCardState ? setEditCardState({...editCardState, card_number: card_number}) : setNewCardState({...newCardState, card_number: card_number})
-    }
-
-    const validateExpirationDate = (name, expiration_date) =>  {
-        const expirationDateField = document.querySelector('input[name=expiration_date]')
-        const regx = new RegExp(/^(0[1-9]|1[0-2])\/?([0-9]{2})$/)
-
-        expirationDateField.value = expirationDateField.value.slice(0, 16)
-        setHasError(prevState => ({
-            ...prevState,
-            [name]: (expiration_date.match(regx)) ? false : true
-        }))
-        setFieldsValidated({...fieldsValidated, expiration_date: expiration_date.match(regx) !== null })
-        editCardState ? setEditCardState({...editCardState, expiration_date: expiration_date}) : setNewCardState({...newCardState, expiration_date: expiration_date})
-    }
-
-    const validateCvc = (name, cvc_number) =>  {
-        const cvcNumberField = document.querySelector('input[name=cvc_number]')
-        if (cvc_number.length !== 3) {
-            cvcNumberField.value = cvcNumberField.value.slice(0, 3)
-        }
-        setHasError(prevState => ({
-            ...prevState,
-            [name]: (cvcNumberField.value.length === 3 && /^[0-9]+$/.test(cvc_number)) ? false : true
-        }))
-        setFieldsValidated({...fieldsValidated, cvc_number: (cvcNumberField.value.length === 3 && /^[0-9]+$/.test(cvc_number))})
-        editCardState ? setEditCardState({...editCardState, cvc_number: cvc_number}) : setNewCardState({...newCardState, cvc_number: cvc_number})
-    }    
-
     const onInputChange = (e) => {
         const { name, value } = e.target
         switch(name) {
             case 'card_name': {
-               validateName(name, value)
+                // validates name is not empty and contains only letters
+                const regx = new RegExp(/^[A-Za-z\s]*$/)
+                const validationCondition = ((value !== '') && regx.test(value))
+                validateField(name, validationCondition, value)
                break
             }
             case 'card_number': {
-                validateCardNumber(name, value)
+                // validates card number contains only numbers and has 16 digits
+                const regx = new RegExp(/^[0-9]+$/)
+                const validationCondition = (value.length === 16 && regx.test(value))
+                validateField(name, validationCondition, value)
                 break
              }
              case 'expiration_date': {
-                validateExpirationDate(name, value)
+                // validates expiration date first 2 digits are between 1 and 12, then there is a "/", and then 2 numbers
+                const regx = new RegExp(/^(0[1-9]|1[0-2])\/?([0-9]{2})$/)
+                const validationCondition = value.match(regx) !== null
+                validateField(name, validationCondition, value)
                 break
              }
              case 'cvc_number': {
-                validateCvc(name, value)
+                // validates input contains only numbers
+                const regx = new RegExp(/^[0-9]+$/)
+                const validationCondition = regx.test(value)
+                validateField(name, validationCondition, value)
                 break
              }
              default: break
@@ -101,6 +68,7 @@ const CardForm = ({
 
     const handleSubmit = (e) => {
         e.preventDefault()
+
         if (submitEnabled) {
             if (editingCard) {
                 dispatch({ type: 'EDIT_CARD', card: {
@@ -108,7 +76,7 @@ const CardForm = ({
                     type: editingCard.type,
                     cvc_number: editCardState.cvc_number,
                     expiration_date: editCardState.expiration_date,
-                    name: editCardState.name,
+                    name: editCardState.card_name,
                     card_number: editCardState.card_number
                 }})
                 closeEditCard()
@@ -116,7 +84,7 @@ const CardForm = ({
                 dispatch({ type: 'ADD_CARD', card: {
                     cvc_number: newCardState.cvc_number,
                     expiration_date: newCardState.expiration_date,
-                    name: newCardState.name,
+                    name: newCardState.card_name,
                     card_number: newCardState.card_number
                 }})
                 closeAddCard()
@@ -132,19 +100,26 @@ const CardForm = ({
         <form className="details-form" onSubmit={((e) => handleSubmit(e))}>
 
             <div className="form-group">
-                <label className={"label" + (hasError.card_name ? " has-errors" : "") + (fieldsValidated.name ? " validated" : "")}>Name in card</label>
+                <label className={"label" + (fieldsValidated.card_name !== null ? (fieldsValidated.card_name ? " validated" : " has-errors") : "")}>
+                    Name in card
+                </label>
                 <input 
                     type="text"
                     name="card_name"
                     onChange={(e)=> onInputChange(e)}
                     placeholder="John Doe"
                     maxLength="40"
-                    value={editCardState ? editCardState.name : newCardState.name}
+                    value={editCardState ? editCardState.card_name : newCardState.card_name}
                 />
-                <label className={"error-label" + (hasError.card_name ? " visible" : "")}>Please fil in your name</label>
+                <label className={"error-label" + (fieldsValidated.card_name !== null && !fieldsValidated.card_name ? " visible" : "")}>
+                    Please fil in your name
+                </label>
             </div>
+
             <div className="form-group">
-                <label className={"label" + (hasError.card_number ? " has-errors" : "") + (fieldsValidated.card_number ? " validated" : "")}>Card number</label>
+                <label className={"label" + (fieldsValidated.card_number !== null ? (fieldsValidated.card_number ? " validated" : " has-errors") : "")}>
+                    Card number
+                </label>
                 <input 
                     type="text"
                     name="card_number" 
@@ -153,10 +128,15 @@ const CardForm = ({
                     maxLength="16"
                     value={editCardState ? editCardState.card_number  : newCardState.card_number}
                 />
-                <label className={"error-label" + (hasError.card_number ? " visible" : "")}>Please enter a valid credit card number</label>
+                <label className={"error-label" + (fieldsValidated.card_number !== null && !fieldsValidated.card_number ? " visible" : "")}>
+                    Please enter a valid credit card number
+                </label>
             </div>
+
             <div className="form-group">
-                <label className={"label" + (hasError.expiration_date ? " has-errors" : "") + (fieldsValidated.expiration_date ? " validated" : "")}>Expiry date</label>
+                <label className={"label" + (fieldsValidated.expiration_date !== null ? (fieldsValidated.expiration_date ? " validated" : " has-errors") : "")}>
+                    Expiry date
+                </label>
                 <input 
                     type="text"
                     name="expiration_date"
@@ -165,10 +145,15 @@ const CardForm = ({
                     maxLength="5"
                     value={editCardState ? editCardState.expiration_date : newCardState.expiration_date}
                 />
-                <label className={"error-label" + (hasError.expiration_date ? " visible" : "")}>Please enter a valid expiry date</label>
+                <label className={"error-label" + (fieldsValidated.expiration_date !== null && !fieldsValidated.expiration_date ? " visible" : "")}>
+                    Please enter a valid expiry date
+                </label>
             </div>
+
             <div className="form-group">
-                <label className={"label" + (hasError.cvc_number ? " has-errors" : "") + (fieldsValidated.cvc_number ? " validated" : "")}>CVC(Security code)</label>
+                <label className={"label" + (fieldsValidated.cvc_number !== null ? (fieldsValidated.cvc_number ? " validated" : " has-errors") : "")}>
+                    CVC(Security code)
+                </label>
                 <input 
                     type="text"
                     name="cvc_number"
@@ -177,7 +162,9 @@ const CardForm = ({
                     maxLength="3"
                     value={editCardState ? editCardState.cvc_number : newCardState.cvc_number}
                 />
-                <label className={"error-label" + (hasError.cvc_number ? " visible" : "")}>Please enter a valid Security code</label>
+                <label className={"error-label" + (fieldsValidated.cvc_number !== null && !fieldsValidated.cvc_number ? " visible" : "")}>
+                    Please enter a valid Security code
+                </label>
             </div>
 
             <input className={"btn-submit" + (submitEnabled ? " enabled" : "")} type="submit" value="Confirm" />

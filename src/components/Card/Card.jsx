@@ -26,7 +26,7 @@ const Card = ({
 
         <div className="row card-bottom-group">
             <div className="group">
-              <p className="title">{editCardState ? editCardState.name : card.name}</p>
+              <p className="title">{editCardState ? editCardState.card_name : card.name}</p>
               <p className="card-number">
                 {editCardState ? editCardNumber(editCardState.card_number) : editCardNumber(card.card_number)}
               </p>

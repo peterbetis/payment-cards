@@ -8,7 +8,7 @@ const EditCard = ({ setShowEditCard, setShowOverlay, card }) => {
     const [editCardState, setEditCardState] = useState({
         cvc_number: card.cvc_number,
         expiration_date: card.expiration_date,
-        name: card.name,
+        card_name: card.name,
         card_number: card.card_number     
     })
 
