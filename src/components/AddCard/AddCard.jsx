@@ -1,11 +1,10 @@
 import CardForm from '../CardForm'
 import '../../styles/addcard.scss'
 
-const AddCard = ({ setShowAddCard, setShowOverlay }) => {
+const AddCard = ({ setShowAddCard }) => {
 
     const closeAddCard = () => {
         setShowAddCard(false)
-        setShowOverlay(false)
     }
 
     return (

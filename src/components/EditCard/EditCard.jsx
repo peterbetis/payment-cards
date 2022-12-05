@@ -3,18 +3,17 @@ import CardForm from '../CardForm'
 import Card from '../Card'
 import '../AddCard'
 
-const EditCard = ({ setShowEditCard, setShowOverlay, card }) => {
+const EditCard = ({ setShowEditCard, card }) => {
 
     const [editCardState, setEditCardState] = useState({
         cvc_number: card.cvc_number,
         expiration_date: card.expiration_date,
         card_name: card.name,
-        card_number: card.card_number     
+        card_number: card.card_number
     })
 
     const closeEditCard = () => {
         setShowEditCard(false)
-        setShowOverlay(false)
     }
 
     return (
